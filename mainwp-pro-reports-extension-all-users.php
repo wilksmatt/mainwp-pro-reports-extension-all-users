@@ -224,3 +224,19 @@ add_filter('mainwp_pro_reports_parsed_other_tokens', function($parsed_other_toke
 
     return $parsed_other_tokens;
 }, 10, 3);
+
+// Check for MainWP Pro Reports Extension dependency
+add_action('admin_init', function() {
+    if (is_admin() && current_user_can('activate_plugins')) {
+        if (!class_exists('MainWP_Pro_Reports_Extension')) {
+            add_action('admin_notices', function() {
+                echo '<div class="notice notice-error"><p><strong>MainWP Pro Reports Extension - All Users</strong> requires the <a href="https://mainwp.com/extension/pro-reports/" target="_blank">MainWP Pro Reports</a> extension to be installed and activated.</p></div>';
+            });
+            // Deactivate this plugin if dependency is missing
+            deactivate_plugins(plugin_basename(__FILE__));
+            if (isset($_GET['activate'])) {
+                unset($_GET['activate']);
+            }
+        }
+    }
+});
