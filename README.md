@@ -34,3 +34,13 @@ Or:
 
 ## Support
 For issues or feature requests, please open an issue on the [GitHub repository](https://github.com/wilksmatt/mainwp-pro-reports-extension-all-users).
+
+## Changelog
+
+All notable changes to this project will be documented in this file.
+
+### 1.1.0 - User Post Count
+- Added display of the `post_count` field from the `mainwp_wp` table as a "Posts" column in the `[allusers.table]` output and as a "Posts: <count>" label in the `[allusers]` list output. This ensures user post counts from child sites are visible in generated reports.
+
+### 1.0.0 - Initial release
+- Initial plugin to add `[allusers]` and `[allusers.table]` tokens to MainWP Pro Reports, allowing listing of users from child sites.

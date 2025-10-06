@@ -3,7 +3,7 @@
  * Plugin Name: MainWP Pro Reports Extension - All Users
  * Plugin URI: https://github.com/wilksmatt/mainwp-pro-reports-extension-all-users
  * Description: Adds a custom token to MainWP Pro Reports to display all users from child sites in Pro Reports.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Matt Wilks
  * License: GPL v2 or later
  */
@@ -79,11 +79,21 @@ class MainWP_Pro_Reports_All_Users {
             } else {
                 $role_names = 'No role';
             }
+            // Get post count (may be present as object property or array key)
+            if (isset($user->post_count)) {
+                $post_count = $user->post_count;
+            } elseif (isset($user['post_count'])) {
+                $post_count = $user['post_count'];
+            } else {
+                $post_count = 0;
+            }
+
             $output .= sprintf(
-                "%s (%s) - %s\n",
+                "%s (%s) - %s - Posts: %s\n",
                 esc_html($login),
                 esc_html($email),
-                esc_html($role_names)
+                esc_html($role_names),
+                esc_html($post_count)
             );
         }
         return trim($output);
@@ -101,6 +111,7 @@ class MainWP_Pro_Reports_All_Users {
             . '<th style="padding: 8px; border: 1px solid #dee2e6; text-align: left;">Username</th>'
             . '<th style="padding: 8px; border: 1px solid #dee2e6; text-align: left;">Email</th>'
             . '<th style="padding: 8px; border: 1px solid #dee2e6; text-align: left;">Role(s)</th>'
+            . '<th style="padding: 8px; border: 1px solid #dee2e6; text-align: left;">Posts</th>'
             . '<th style="padding: 8px; border: 1px solid #dee2e6; text-align: left;">Registration Date</th>'
             . '</tr></thead><tbody>';
         foreach ($users as $user) {
@@ -116,6 +127,15 @@ class MainWP_Pro_Reports_All_Users {
             } else {
                 $role_names = 'No role';
             }
+            // Get post count (may be present as object property or array key)
+            if (isset($user->post_count)) {
+                $post_count = $user->post_count;
+            } elseif (isset($user['post_count'])) {
+                $post_count = $user['post_count'];
+            } else {
+                $post_count = 0;
+            }
+
             // Get registration date
             if (!empty($user->user_registered)) {
                 $reg_date = date('Y-m-d', strtotime($user->user_registered));
@@ -130,10 +150,12 @@ class MainWP_Pro_Reports_All_Users {
                 . '<td style="padding: 8px; border: 1px solid #dee2e6;">%s</td>'
                 . '<td style="padding: 8px; border: 1px solid #dee2e6;">%s</td>'
                 . '<td style="padding: 8px; border: 1px solid #dee2e6;">%s</td>'
+                . '<td style="padding: 8px; border: 1px solid #dee2e6;">%s</td>'
                 . '</tr>',
                 esc_html($login),
                 esc_html($email),
                 esc_html($role_names),
+                esc_html($post_count),
                 esc_html($reg_date)
             );
         }
